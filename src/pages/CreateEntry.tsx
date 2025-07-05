@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,22 +41,33 @@ const CreateEntry = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    const { error } = await supabase.from("users").insert([
+      {
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        status: "Active",
+        join_date: new Date().toISOString().slice(0, 10),
+      },
+    ]);
+    setIsLoading(false);
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error creating entry",
+        description: error.message,
+      });
+    } else {
       toast({
         title: "Success!",
         description: "New entry has been created successfully.",
       });
       navigate("/dashboard");
-    }, 1500);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {

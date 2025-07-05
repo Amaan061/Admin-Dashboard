@@ -1,56 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock data for the dashboard
-const mockData = [
-  {
-    id: 1,
-    name: "John Smith",
-    email: "john.smith@example.com",
-    role: "Manager",
-    status: "Active",
-    joinDate: "2024-01-15"
-  },
-  {
-    id: 2,
-    name: "Sarah Johnson",
-    email: "sarah.j@example.com", 
-    role: "Developer",
-    status: "Active",
-    joinDate: "2024-02-20"
-  },
-  {
-    id: 3,
-    name: "Mike Wilson",
-    email: "mike.wilson@example.com",
-    role: "Designer",
-    status: "Inactive",
-    joinDate: "2024-01-08"
-  },
-  {
-    id: 4,
-    name: "Emily Davis",
-    email: "emily.davis@example.com",
-    role: "Analyst",
-    status: "Active",
-    joinDate: "2024-03-10"
-  },
-  {
-    id: 5,
-    name: "Robert Brown",
-    email: "robert.b@example.com",
-    role: "Manager",
-    status: "Active",
-    joinDate: "2023-12-05"
-  }
-];
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  join_date: string;
+};
 
 const Dashboard = () => {
-  const [data, setData] = useState(mockData);
+  const [data, setData] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("users")
+        .select("id, name, email, role, status, join_date");
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error fetching users",
+          description: error.message,
+        });
+      } else {
+        setData(data || []);
+      }
+      setLoading(false);
+    };
+    fetchUsers();
+  }, [toast]);
 
   const handleEdit = (id: number) => {
     toast({
@@ -59,12 +46,21 @@ const Dashboard = () => {
     });
   };
 
-  const handleDelete = (id: number) => {
-    setData(data.filter(item => item.id !== id));
-    toast({
-      title: "Entry Deleted",
-      description: "The entry has been successfully removed.",
-    });
+  const handleDelete = async (id: number) => {
+    const { error } = await supabase.from("users").delete().eq("id", id);
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error deleting entry",
+        description: error.message,
+      });
+    } else {
+      setData(data.filter(item => item.id !== id));
+      toast({
+        title: "Entry Deleted",
+        description: "The entry has been successfully removed.",
+      });
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -79,7 +75,11 @@ const Dashboard = () => {
     { title: "Total Users", value: data.length, icon: "👥" },
     { title: "Active Users", value: data.filter(u => u.status === "Active").length, icon: "✅" },
     { title: "Managers", value: data.filter(u => u.role === "Manager").length, icon: "👔" },
-    { title: "This Month", value: data.filter(u => u.joinDate.startsWith("2024-03")).length, icon: "📅" }
+    { title: "Joined This Month", value: data.filter(u => {
+      const now = new Date();
+      const join = new Date(u.join_date);
+      return join.getMonth() === now.getMonth() && join.getFullYear() === now.getFullYear();
+    }).length, icon: "📅" }
   ];
 
   return (
@@ -141,46 +141,56 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, index) => (
-                  <tr key={row.id} className="table-row-hover border-b border-border/50">
-                    <td className="p-6">
-                      <div className="flex items-center space-x-5">
-                        <div className="w-12 h-12 xl:w-14 xl:h-14 bg-gradient-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold text-2xl xl:text-3xl">
-                          {row.name.charAt(0)}
-                        </div>
-                        <span className="font-medium text-foreground text-xl xl:text-2xl">{row.name}</span>
-                      </div>
-                    </td>
-                    <td className="p-6 text-muted-foreground">{row.email}</td>
-                    <td className="p-6">
-                      <Badge variant="outline" className="text-lg xl:text-xl px-4 py-2">{row.role}</Badge>
-                    </td>
-                    <td className="p-6">{getStatusBadge(row.status)}</td>
-                    <td className="p-6 text-muted-foreground">
-                      {new Date(row.joinDate).toLocaleDateString()}
-                    </td>
-                    <td className="p-6">
-                      <div className="flex space-x-4">
-                        <Button
-                          variant="outline"
-                          size="lg"
-                          onClick={() => handleEdit(row.id)}
-                          className="hover:bg-primary/10 hover:text-primary text-lg xl:text-xl px-6 py-3"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="lg"
-                          onClick={() => handleDelete(row.id)}
-                          className="hover:bg-destructive/10 hover:text-destructive text-lg xl:text-xl px-6 py-3"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </td>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="p-10 text-center text-xl text-muted-foreground">Loading users...</td>
                   </tr>
-                ))}
+                ) : data.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-10 text-center text-xl text-muted-foreground">No users found.</td>
+                  </tr>
+                ) : (
+                  data.map((row) => (
+                    <tr key={row.id} className="table-row-hover border-b border-border/50">
+                      <td className="p-6">
+                        <div className="flex items-center space-x-5">
+                          <div className="w-12 h-12 xl:w-14 xl:h-14 bg-gradient-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold text-2xl xl:text-3xl">
+                            {row.name.charAt(0)}
+                          </div>
+                          <span className="font-medium text-foreground text-xl xl:text-2xl">{row.name}</span>
+                        </div>
+                      </td>
+                      <td className="p-6 text-muted-foreground">{row.email}</td>
+                      <td className="p-6">
+                        <Badge variant="outline" className="text-lg xl:text-xl px-4 py-2">{row.role}</Badge>
+                      </td>
+                      <td className="p-6">{getStatusBadge(row.status)}</td>
+                      <td className="p-6 text-muted-foreground">
+                        {row.join_date ? new Date(row.join_date).toLocaleDateString() : "-"}
+                      </td>
+                      <td className="p-6">
+                        <div className="flex space-x-4">
+                          <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={() => handleEdit(row.id)}
+                            className="hover:bg-primary/10 hover:text-primary text-lg xl:text-xl px-6 py-3"
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={() => handleDelete(row.id)}
+                            className="hover:bg-destructive/10 hover:text-destructive text-lg xl:text-xl px-6 py-3"
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
