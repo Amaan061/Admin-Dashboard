@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [roleFilter, setRoleFilter] = useState<string>("All");
+  const [joinDateFilter, setJoinDateFilter] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -88,6 +89,13 @@ const Dashboard = () => {
   if (roleFilter !== "All") {
     filteredData = filteredData.filter((u) => u.role === roleFilter);
   }
+  if (joinDateFilter) {
+    filteredData = filteredData.filter((u) => {
+      if (!u.join_date) return false;
+      // Compare only the date part
+      return new Date(u.join_date).toISOString().split('T')[0] === joinDateFilter;
+    });
+  }
   if (search.trim() !== "") {
     const s = search.toLowerCase();
     filteredData = filteredData.filter((u) =>
@@ -108,8 +116,8 @@ const Dashboard = () => {
     });
   }
 
-  // Get unique roles for dropdown
-  const uniqueRoles = Array.from(new Set(data.map((u) => u.role)));
+  // Use a static list for all possible roles
+  const allRoles = ["Designer", "Manager", "Analyst", "Developer", "Intern"];
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 xl:px-8 space-y-12 animate-fade-in">
@@ -161,10 +169,20 @@ const Dashboard = () => {
                 onChange={e => setRoleFilter(e.target.value)}
               >
                 <option value="All">All</option>
-                {uniqueRoles.map(role => (
+                {allRoles.map(role => (
                   <option key={role} value={role}>{role}</option>
                 ))}
               </select>
+            </div>
+            <div className="flex items-center bg-muted/60 rounded-lg px-4 py-2 shadow-sm w-full sm:w-auto">
+              <label className="mr-3 font-semibold text-muted-foreground whitespace-nowrap">Join Date:</label>
+              <input
+                type="date"
+                className="bg-transparent outline-none border-none text-base font-medium text-foreground focus:ring-0 focus:outline-none"
+                value={joinDateFilter || ''}
+                onChange={e => setJoinDateFilter(e.target.value)}
+                max={new Date().toISOString().split('T')[0]}
+              />
             </div>
             <div className="flex-1 flex items-center bg-muted/60 rounded-lg px-4 py-2 shadow-sm">
               <svg className="w-5 h-5 text-muted-foreground mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
