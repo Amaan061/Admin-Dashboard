@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateEntry from "./pages/CreateEntry";
 import EditEntry from "./pages/EditEntry";
 import DashboardLayout from "./components/DashboardLayout";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/create-entry" element={<CreateEntry />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/edit-entry/:id" element={<EditEntry />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -26,20 +26,18 @@ const DashboardLayout = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-background">
+    <div className="min-h-screen w-full bg-background flex">
       <Sidebar isCollapsed={isCollapsed} onToggle={() => setIsCollapsed(!isCollapsed)} />
-      
-      <main 
+      <main
         className={cn(
-          "min-h-screen overflow-auto transition-all duration-300",
-          isCollapsed ? "ml-16" : "ml-64"
+          "min-h-screen flex-1 overflow-auto transition-all duration-300",
+          isCollapsed ? "ml-20" : "ml-56 xl:ml-72"
         )}
       >
-        <div className="container mx-auto p-6 max-w-7xl">
+        <div className="px-4 sm:px-8 py-8 max-w-7xl mx-auto">
           <Outlet />
         </div>
       </main>
-      
       <Toaster />
     </div>
   );

@@ -7,12 +7,17 @@ const sidebarItems = [
   {
     title: "Dashboard",
     url: "/dashboard",
-    icon: "📊"
+    icon: <span className="text-2xl">📊</span>
   },
   {
     title: "Create Entry",
     url: "/create-entry",
-    icon: "➕"
+    icon: <span className="text-2xl">➕</span>
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: <span className="text-2xl">⚙️</span>
   }
 ];
 
@@ -37,13 +42,13 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 
   return (
     <div className={cn(
-      "fixed left-0 top-0 z-40 bg-card border-r border-border transition-all duration-300 flex flex-col h-screen",
-      isCollapsed ? "w-16" : "w-64"
+      "fixed left-0 top-0 z-40 bg-card border-r border-border transition-all duration-300 flex flex-col h-screen shadow-xl",
+      isCollapsed ? "w-20" : "w-56 xl:w-72"
     )}>
       {/* Header */}
       <div className={cn(
         "border-b border-border flex items-center justify-between",
-        isCollapsed ? "px-0 py-2" : "p-4"
+        isCollapsed ? "px-0 py-3" : "p-6 xl:p-8"
       )}>
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
@@ -67,8 +72,8 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 
       {/* Navigation */}
       <nav className={cn(
-        "flex-1",
-        isCollapsed ? "py-4 flex flex-col items-center gap-4" : "p-4 space-y-2"
+        "flex-1 overflow-y-auto custom-scrollbar",
+        isCollapsed ? "py-6 flex flex-col items-center gap-6" : "p-6 xl:p-8 space-y-3"
       )}>
         {sidebarItems.map((item) => (
           <NavLink
@@ -77,15 +82,22 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
             className={({ isActive }) =>
               cn(
                 "sidebar-item group flex items-center justify-center",
-                isCollapsed ? "w-10 h-10 rounded-lg hover:bg-accent text-xl" : "",
+                isCollapsed ? "w-12 h-12 rounded-lg hover:bg-accent text-2xl" : "py-3 px-3 gap-4 text-xl",
                 isActive && "active"
               )
             }
             style={isCollapsed ? { margin: 0 } : {}}
           >
-            <span className={cn(isCollapsed ? "mx-auto" : "text-lg")}>{item.icon}</span>
+            {/* Move the Settings icon further left by adding a negative margin if not collapsed */}
+            {item.title === "Settings" && !isCollapsed ? (
+              <span className="text-2xl flex-shrink-0 -ml-6 mr-2">{item.icon}</span>
+            ) : (
+              <span className={cn(isCollapsed ? "mx-auto" : "text-2xl flex-shrink-0")}>{item.icon}</span>
+            )}
             {!isCollapsed && (
-              <span className="ml-3 transition-all duration-200">{item.title}</span>
+              <span className="ml-4 font-semibold tracking-wide text-lg xl:text-xl transition-all duration-200">
+                {item.title}
+              </span>
             )}
           </NavLink>
         ))}
@@ -93,14 +105,14 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 
       {/* User Section */}
       <div className={cn(
-        isCollapsed ? "flex flex-col items-center gap-2 py-4 border-t border-border" : "p-4 border-t border-border"
+        isCollapsed ? "flex flex-col items-center gap-3 py-6 border-t border-border" : "p-6 xl:p-8 border-t border-border"
       )}>
         <div className={cn(
           "flex items-center",
-          isCollapsed ? "justify-center w-10 h-10 bg-gradient-primary rounded-full mb-1" : "space-x-3 p-3 rounded-lg bg-muted/50"
+          isCollapsed ? "justify-center w-12 h-12 bg-gradient-primary rounded-full mb-2" : "space-x-4 p-4 rounded-xl bg-muted/60"
         )}>
           <div className={cn(
-            isCollapsed ? "w-7 h-7 flex items-center justify-center text-primary-foreground font-semibold text-base" : "w-8 h-8 flex items-center justify-center text-primary-foreground font-semibold text-sm bg-gradient-primary rounded-full"
+            isCollapsed ? "w-8 h-8 flex items-center justify-center text-primary-foreground font-semibold text-lg" : "w-10 h-10 flex items-center justify-center text-primary-foreground font-semibold text-lg bg-gradient-primary rounded-full"
           )}>
             A
           </div>
