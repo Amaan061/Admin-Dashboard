@@ -60,29 +60,33 @@ const Login = () => {
           
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-4">
-                <div className="input-floating">
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium text-foreground">
+                    Email Address
+                  </label>
                   <Input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="h-14"
+                    placeholder="Enter your email address"
+                    className="h-12 transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <label htmlFor="email">Email</label>
                 </div>
                 
-                <div className="input-floating">
+                <div className="space-y-2">
+                  <label htmlFor="password" className="text-sm font-medium text-foreground">
+                    Password
+                  </label>
                   <Input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
-                    className="h-14"
+                    className="h-12 transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <label htmlFor="password">Password</label>
                 </div>
               </div>
               
