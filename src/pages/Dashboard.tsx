@@ -103,14 +103,10 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
         {stats.map((stat, index) => (
           <Card key={index} className="card-hover border-0 shadow-lg bg-gradient-surface">
-            <CardContent className="flex items-center p-10 min-h-[120px]">
-              <div className="flex items-center space-x-8">
-                <div className="text-4xl xl:text-5xl">{stat.icon}</div>
-                <div>
-                  <p className="text-4xl xl:text-5xl font-bold text-foreground">{stat.value}</p>
-                  <p className="text-lg xl:text-xl text-muted-foreground">{stat.title}</p>
-                </div>
-              </div>
+            <CardContent className="flex flex-col items-center justify-center p-10 min-h-[120px] h-full">
+              <span className="text-5xl mb-2 flex items-center justify-center">{stat.icon}</span>
+              <span className="text-4xl xl:text-5xl font-bold text-foreground">{stat.value}</span>
+              <span className="text-lg xl:text-xl text-muted-foreground">{stat.title}</span>
             </CardContent>
           </Card>
         ))}
