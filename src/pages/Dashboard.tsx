@@ -17,6 +17,10 @@ type User = {
 const Dashboard = () => {
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [roleFilter, setRoleFilter] = useState<string>("All");
+  const [search, setSearch] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -79,6 +83,34 @@ const Dashboard = () => {
     }).length, icon: "📅" }
   ];
 
+  // Filtering and sorting logic
+  let filteredData = data;
+  if (roleFilter !== "All") {
+    filteredData = filteredData.filter((u) => u.role === roleFilter);
+  }
+  if (search.trim() !== "") {
+    const s = search.toLowerCase();
+    filteredData = filteredData.filter((u) =>
+      u.name.toLowerCase().includes(s) || u.email.toLowerCase().includes(s)
+    );
+  }
+  if (sortBy) {
+    filteredData = [...filteredData].sort((a, b) => {
+      let aValue = a[sortBy as keyof User];
+      let bValue = b[sortBy as keyof User];
+      if (sortBy === "join_date") {
+        aValue = new Date(aValue as string).getTime();
+        bValue = new Date(bValue as string).getTime();
+      }
+      if (aValue === bValue) return 0;
+      if (sortOrder === "asc") return aValue > bValue ? 1 : -1;
+      return aValue < bValue ? 1 : -1;
+    });
+  }
+
+  // Get unique roles for dropdown
+  const uniqueRoles = Array.from(new Set(data.map((u) => u.role)));
+
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 xl:px-8 space-y-12 animate-fade-in">
       {/* Header */}
@@ -119,17 +151,75 @@ const Dashboard = () => {
           <CardDescription className="text-lg xl:text-xl">
             Manage your team members and their information
           </CardDescription>
+          {/* Filters */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-8 mb-2 w-full">
+            <div className="flex items-center bg-muted/60 rounded-lg px-4 py-2 shadow-sm w-full sm:w-auto">
+              <label className="mr-3 font-semibold text-muted-foreground whitespace-nowrap">Role:</label>
+              <select
+                className="bg-transparent outline-none border-none text-base font-medium text-foreground focus:ring-0 focus:outline-none"
+                value={roleFilter}
+                onChange={e => setRoleFilter(e.target.value)}
+              >
+                <option value="All">All</option>
+                {uniqueRoles.map(role => (
+                  <option key={role} value={role}>{role}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex-1 flex items-center bg-muted/60 rounded-lg px-4 py-2 shadow-sm">
+              <svg className="w-5 h-5 text-muted-foreground mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input
+                type="text"
+                className="bg-transparent border-none outline-none w-full text-base font-medium text-foreground placeholder:text-muted-foreground"
+                placeholder="Search by name or email..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-lg xl:text-xl">
               <thead className="bg-muted/30">
                 <tr>
-                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Name</th>
-                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Email</th>
-                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Role</th>
+                  <th
+                    className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground cursor-pointer select-none"
+                    onClick={() => {
+                      if (sortBy === "name") setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+                      setSortBy("name");
+                    }}
+                  >
+                    Name {sortBy === "name" && (sortOrder === "asc" ? "▲" : "▼")}
+                  </th>
+                  <th
+                    className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground cursor-pointer select-none"
+                    onClick={() => {
+                      if (sortBy === "email") setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+                      setSortBy("email");
+                    }}
+                  >
+                    Email {sortBy === "email" && (sortOrder === "asc" ? "▲" : "▼")}
+                  </th>
+                  <th
+                    className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground cursor-pointer select-none"
+                    onClick={() => {
+                      if (sortBy === "role") setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+                      setSortBy("role");
+                    }}
+                  >
+                    Role {sortBy === "role" && (sortOrder === "asc" ? "▲" : "▼")}
+                  </th>
                   <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Status</th>
-                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Join Date</th>
+                  <th
+                    className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground cursor-pointer select-none"
+                    onClick={() => {
+                      if (sortBy === "join_date") setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+                      setSortBy("join_date");
+                    }}
+                  >
+                    Join Date {sortBy === "join_date" && (sortOrder === "asc" ? "▲" : "▼")}
+                  </th>
                   <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Actions</th>
                 </tr>
               </thead>
@@ -138,12 +228,12 @@ const Dashboard = () => {
                   <tr>
                     <td colSpan={6} className="p-10 text-center text-xl text-muted-foreground">Loading users...</td>
                   </tr>
-                ) : data.length === 0 ? (
+                ) : filteredData.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="p-10 text-center text-xl text-muted-foreground">No users found.</td>
                   </tr>
                 ) : (
-                  data.map((row) => (
+                  filteredData.map((row) => (
                     <tr key={row.id} className="table-row-hover border-b border-border/50">
                       <td className="p-6">
                         <div className="flex items-center space-x-5">
