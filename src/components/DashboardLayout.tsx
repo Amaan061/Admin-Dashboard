@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
 
 const DashboardLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -25,10 +26,15 @@ const DashboardLayout = () => {
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <div className="min-h-screen w-full bg-background">
       <Sidebar isCollapsed={isCollapsed} onToggle={() => setIsCollapsed(!isCollapsed)} />
       
-      <main className="flex-1 overflow-auto">
+      <main 
+        className={cn(
+          "min-h-screen overflow-auto transition-all duration-300",
+          isCollapsed ? "ml-16" : "ml-64"
+        )}
+      >
         <div className="container mx-auto p-6 max-w-7xl">
           <Outlet />
         </div>
