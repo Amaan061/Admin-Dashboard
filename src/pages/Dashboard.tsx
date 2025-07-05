@@ -40,10 +40,7 @@ const Dashboard = () => {
   }, [toast]);
 
   const handleEdit = (id: number) => {
-    toast({
-      title: "Edit Feature",
-      description: `Edit functionality for user ID ${id} would open here.`,
-    });
+    window.location.href = `/edit-entry/${id}`;
   };
 
   const handleDelete = async (id: number) => {
