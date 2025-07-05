@@ -39,30 +39,30 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20 p-4">
-      <div className="w-full max-w-md animate-scale-in">
-        <Card className="shadow-lg border-0 bg-card/95 backdrop-blur-sm">
-          <CardHeader className="space-y-4 pb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20 p-6 xl:p-12">
+      <div className="w-full max-w-2xl animate-scale-in">
+        <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm">
+          <CardHeader className="space-y-6 pb-12">
             <div className="flex justify-center">
-              <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
-                <div className="w-8 h-8 bg-primary-foreground rounded-lg"></div>
+              <div className="w-24 h-24 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
+                <div className="w-12 h-12 bg-primary-foreground rounded-lg"></div>
               </div>
             </div>
-            <div className="text-center space-y-2">
-              <CardTitle className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <div className="text-center space-y-3">
+              <CardTitle className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 Welcome Back
               </CardTitle>
-              <CardDescription className="text-muted-foreground">
+              <CardDescription className="text-lg text-muted-foreground">
                 Sign in to your admin dashboard
               </CardDescription>
             </div>
           </CardHeader>
           
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-5">
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-foreground">
+            <form onSubmit={handleSubmit} className="space-y-10">
+              <div className="space-y-7">
+                <div className="space-y-3">
+                  <label htmlFor="email" className="text-lg font-semibold text-foreground">
                     Email Address
                   </label>
                   <Input
@@ -71,12 +71,11 @@ const Login = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
-                    className="h-12 transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium text-foreground">
+                <div className="space-y-3">
+                  <label htmlFor="password" className="text-lg font-semibold text-foreground">
                     Password
                   </label>
                   <Input
@@ -85,19 +84,19 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
-                    className="h-12 transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    togglePassword
                   />
                 </div>
               </div>
-              
               <Button 
                 type="submit" 
-                className="w-full h-12 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
+                className="w-full h-14 text-lg bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
                     <span>Signing in...</span>
                   </div>
                 ) : (
@@ -105,9 +104,8 @@ const Login = () => {
                 )}
               </Button>
             </form>
-            
-            <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground">
+            <div className="mt-10 text-center">
+              <p className="text-lg text-muted-foreground">
                 Demo credentials: any email and password
               </p>
             </div>

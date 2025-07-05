@@ -83,16 +83,16 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="w-full max-w-[1400px] mx-auto px-4 xl:px-8 space-y-12 animate-fade-in">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-4xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-lg text-muted-foreground mt-2">
             Welcome back! Here's what's happening with your team.
           </p>
         </div>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-base md:text-lg text-muted-foreground">
           {new Date().toLocaleDateString("en-US", { 
             weekday: "long", 
             year: "numeric", 
@@ -103,15 +103,15 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
         {stats.map((stat, index) => (
-          <Card key={index} className="card-hover border-0 shadow-md bg-gradient-surface">
-            <CardContent className="flex items-center p-6">
-              <div className="flex items-center space-x-4">
-                <div className="text-2xl">{stat.icon}</div>
+          <Card key={index} className="card-hover border-0 shadow-lg bg-gradient-surface">
+            <CardContent className="flex items-center p-10 min-h-[120px]">
+              <div className="flex items-center space-x-8">
+                <div className="text-4xl xl:text-5xl">{stat.icon}</div>
                 <div>
-                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                  <p className="text-sm text-muted-foreground">{stat.title}</p>
+                  <p className="text-4xl xl:text-5xl font-bold text-foreground">{stat.value}</p>
+                  <p className="text-lg xl:text-xl text-muted-foreground">{stat.title}</p>
                 </div>
               </div>
             </CardContent>
@@ -120,60 +120,60 @@ const Dashboard = () => {
       </div>
 
       {/* Data Table */}
-      <Card className="border-0 shadow-md">
-        <CardHeader className="bg-card-header rounded-t-lg">
-          <CardTitle className="text-xl">Team Members</CardTitle>
-          <CardDescription>
+      <Card className="border-0 shadow-lg">
+        <CardHeader className="bg-card-header rounded-t-lg p-8 xl:p-10">
+          <CardTitle className="text-2xl xl:text-3xl">Team Members</CardTitle>
+          <CardDescription className="text-lg xl:text-xl">
             Manage your team members and their information
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full text-lg xl:text-xl">
               <thead className="bg-muted/30">
                 <tr>
-                  <th className="text-left p-4 font-semibold text-sm text-muted-foreground">Name</th>
-                  <th className="text-left p-4 font-semibold text-sm text-muted-foreground">Email</th>
-                  <th className="text-left p-4 font-semibold text-sm text-muted-foreground">Role</th>
-                  <th className="text-left p-4 font-semibold text-sm text-muted-foreground">Status</th>
-                  <th className="text-left p-4 font-semibold text-sm text-muted-foreground">Join Date</th>
-                  <th className="text-left p-4 font-semibold text-sm text-muted-foreground">Actions</th>
+                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Name</th>
+                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Email</th>
+                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Role</th>
+                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Status</th>
+                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Join Date</th>
+                  <th className="text-left p-6 font-semibold text-lg xl:text-xl text-muted-foreground">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.map((row, index) => (
                   <tr key={row.id} className="table-row-hover border-b border-border/50">
-                    <td className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold text-sm">
+                    <td className="p-6">
+                      <div className="flex items-center space-x-5">
+                        <div className="w-12 h-12 xl:w-14 xl:h-14 bg-gradient-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold text-2xl xl:text-3xl">
                           {row.name.charAt(0)}
                         </div>
-                        <span className="font-medium text-foreground">{row.name}</span>
+                        <span className="font-medium text-foreground text-xl xl:text-2xl">{row.name}</span>
                       </div>
                     </td>
-                    <td className="p-4 text-muted-foreground">{row.email}</td>
-                    <td className="p-4">
-                      <Badge variant="outline">{row.role}</Badge>
+                    <td className="p-6 text-muted-foreground">{row.email}</td>
+                    <td className="p-6">
+                      <Badge variant="outline" className="text-lg xl:text-xl px-4 py-2">{row.role}</Badge>
                     </td>
-                    <td className="p-4">{getStatusBadge(row.status)}</td>
-                    <td className="p-4 text-muted-foreground">
+                    <td className="p-6">{getStatusBadge(row.status)}</td>
+                    <td className="p-6 text-muted-foreground">
                       {new Date(row.joinDate).toLocaleDateString()}
                     </td>
-                    <td className="p-4">
-                      <div className="flex space-x-2">
+                    <td className="p-6">
+                      <div className="flex space-x-4">
                         <Button
                           variant="outline"
-                          size="sm"
+                          size="lg"
                           onClick={() => handleEdit(row.id)}
-                          className="hover:bg-primary/10 hover:text-primary"
+                          className="hover:bg-primary/10 hover:text-primary text-lg xl:text-xl px-6 py-3"
                         >
                           Edit
                         </Button>
                         <Button
                           variant="outline"
-                          size="sm"
+                          size="lg"
                           onClick={() => handleDelete(row.id)}
-                          className="hover:bg-destructive/10 hover:text-destructive"
+                          className="hover:bg-destructive/10 hover:text-destructive text-lg xl:text-xl px-6 py-3"
                         >
                           Delete
                         </Button>

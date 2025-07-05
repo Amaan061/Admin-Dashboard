@@ -66,29 +66,28 @@ const CreateEntry = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
+    <div className="w-full max-w-3xl xl:max-w-4xl mx-auto px-4 xl:px-8 space-y-12 animate-fade-in">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Create New Entry</h1>
-        <p className="text-muted-foreground mt-1">
+        <h1 className="text-4xl font-bold text-foreground">Create New Entry</h1>
+        <p className="text-lg text-muted-foreground mt-2">
           Add a new team member to your organization
         </p>
       </div>
 
       {/* Form Card */}
-      <Card className="border-0 shadow-lg bg-gradient-surface">
-        <CardHeader className="bg-card-header rounded-t-lg">
-          <CardTitle className="text-xl">Member Information</CardTitle>
-          <CardDescription>
+      <Card className="border-0 shadow-2xl bg-gradient-surface">
+        <CardHeader className="bg-card-header rounded-t-lg p-8 xl:p-10">
+          <CardTitle className="text-2xl xl:text-3xl">Member Information</CardTitle>
+          <CardDescription className="text-lg xl:text-xl">
             Fill in the details for the new team member
           </CardDescription>
         </CardHeader>
-        
-        <CardContent className="p-8">
-          <form onSubmit={handleSubmit} className="space-y-8">
+        <CardContent className="p-10 xl:p-14">
+          <form onSubmit={handleSubmit} className="space-y-10">
             {/* Name Field */}
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium text-foreground">
+            <div className="space-y-3">
+              <label htmlFor="name" className="text-lg font-semibold text-foreground">
                 Full Name <span className="text-destructive">*</span>
               </label>
               <Input
@@ -97,21 +96,21 @@ const CreateEntry = () => {
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 placeholder="Enter the team member's full name"
-                className={`h-12 transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
+                className={`h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
                   errors.name ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''
                 }`}
               />
               {errors.name && (
-                <p className="text-sm text-destructive font-medium flex items-center gap-1 mt-1">
-                  <span className="w-4 h-4 text-destructive">⚠</span>
+                <p className="text-lg text-destructive font-medium flex items-center gap-2 mt-1">
+                  <span className="w-5 h-5 text-destructive">⚠</span>
                   {errors.name}
                 </p>
               )}
             </div>
 
             {/* Email Field */}
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-foreground">
+            <div className="space-y-3">
+              <label htmlFor="email" className="text-lg font-semibold text-foreground">
                 Email Address <span className="text-destructive">*</span>
               </label>
               <Input
@@ -120,7 +119,7 @@ const CreateEntry = () => {
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 placeholder="Enter the team member's email address"
-                className={`h-12 transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
+                className={`h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
                   errors.email ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''
                 }`}
               />
@@ -134,14 +133,14 @@ const CreateEntry = () => {
 
             {/* Role Field */}
             <div className="space-y-2">
-              <label htmlFor="role" className="text-sm font-medium text-foreground">
+              <label htmlFor="role" className="text-lg font-semibold text-foreground">
                 Role <span className="text-destructive">*</span>
               </label>
               <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
-                <SelectTrigger className={`h-12 transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
+                <SelectTrigger className={`h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
                   errors.role ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''
                 }`}>
-                  <SelectValue placeholder="Select the team member's role" />
+                  <SelectValue placeholder="Select the team member's role" className="text-lg" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Manager">Manager</SelectItem>
