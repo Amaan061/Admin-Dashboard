@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import AltibbeLogo from "@/assets/logo/altibbe-logo.svg";
 import useTheme from "@/hooks/useTheme";
+import { useEffect } from "react";
 
 const sidebarItems = [
   {
@@ -32,6 +33,14 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const [theme, setTheme] = useTheme();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Set default theme to dark mode on first load
+  useEffect(() => {
+    if (!theme || theme === "light") {
+      setTheme("dark");
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
@@ -144,7 +153,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           {!isCollapsed && (
             <>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-medium text-foreground truncate overflow-hidden whitespace-nowrap" title={localStorage.getItem("userEmail") || "Admin User"}>
                   {localStorage.getItem("userEmail") || "Admin User"}
                 </p>
                 <p className="text-xs text-muted-foreground">Administrator</p>
