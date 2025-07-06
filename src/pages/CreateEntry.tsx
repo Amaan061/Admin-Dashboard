@@ -82,29 +82,20 @@ const CreateEntry = () => {
   };
 
   return (
-    <div className="min-h-screen h-screen flex items-center justify-center overflow-hidden">
-      <div className="w-full max-w-3xl xl:max-w-4xl px-4 xl:px-8 space-y-12 animate-fade-in">
-        {/* Header */}
-        <div>
-          <h1 className="text-4xl font-bold text-foreground">Create New Entry</h1>
-          <p className="text-lg text-muted-foreground mt-2">
-            Add a new team member to your organization
-          </p>
-        </div>
-
-        {/* Form Card */}
-        <Card className="border-0 shadow-2xl" style={{background: 'var(--gradient-surface, linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%)))'}}>
-          <CardHeader className="bg-card-header rounded-t-lg p-8 xl:p-10">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20">
+      <div className="w-full max-w-2xl animate-scale-in">
+        <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm">
+          <CardHeader className="bg-card-header rounded-t-lg p-6 xl:p-8">
             <CardTitle className="text-2xl xl:text-3xl">Member Information</CardTitle>
-            <CardDescription className="text-lg xl:text-xl">
+            <CardDescription className="text-base xl:text-lg">
               Fill in the details for the new team member
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-10 xl:p-14">
-            <form onSubmit={handleSubmit} className="space-y-10">
+          <CardContent className="p-6 xl:p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Field */}
-              <div className="space-y-3">
-                <label htmlFor="name" className="text-lg font-semibold text-foreground">
+              <div className="space-y-2">
+                <label htmlFor="name" className="text-base font-semibold text-foreground">
                   Full Name <span className="text-destructive">*</span>
                 </label>
                 <Input
@@ -113,21 +104,18 @@ const CreateEntry = () => {
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   placeholder="Enter the team member's full name"
-                  className={`h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
-                    errors.name ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''
-                  }`}
+                  className={`h-10 text-base transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${errors.name ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''}`}
                 />
                 {errors.name && (
-                  <p className="text-lg text-destructive font-medium flex items-center gap-2 mt-1">
+                  <p className="text-base text-destructive font-medium flex items-center gap-2 mt-1">
                     <span className="w-5 h-5 text-destructive">⚠</span>
                     {errors.name}
                   </p>
                 )}
               </div>
-
               {/* Email Field */}
-              <div className="space-y-3">
-                <label htmlFor="email" className="text-lg font-semibold text-foreground">
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-base font-semibold text-foreground">
                   Email Address <span className="text-destructive">*</span>
                 </label>
                 <Input
@@ -136,9 +124,7 @@ const CreateEntry = () => {
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   placeholder="Enter the team member's email address"
-                  className={`h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
-                    errors.email ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''
-                  }`}
+                  className={`h-10 text-base transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${errors.email ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''}`}
                 />
                 {errors.email && (
                   <p className="text-sm text-destructive font-medium flex items-center gap-1 mt-1">
@@ -147,17 +133,14 @@ const CreateEntry = () => {
                   </p>
                 )}
               </div>
-
               {/* Role Field */}
               <div className="space-y-2">
-                <label htmlFor="role" className="text-lg font-semibold text-foreground">
+                <label htmlFor="role" className="text-base font-semibold text-foreground">
                   Role <span className="text-destructive">*</span>
                 </label>
                 <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
-                  <SelectTrigger className={`h-14 text-lg transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
-                    errors.role ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''
-                  }`}>
-                    <SelectValue placeholder="Select the team member's role" className="text-lg" />
+                  <SelectTrigger className={`h-10 text-base transition-all duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary ${errors.role ? 'border-destructive focus:ring-destructive/20 focus:border-destructive' : ''}`}>
+                    <SelectValue placeholder="Select the team member's role" className="text-base" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Manager">Manager</SelectItem>
@@ -174,17 +157,16 @@ const CreateEntry = () => {
                   </p>
                 )}
               </div>
-
               {/* Join Date Field */}
               <div className="space-y-2">
-                <label className="text-lg font-semibold text-foreground">
+                <label className="text-base font-semibold text-foreground">
                   Join Date <span className="text-destructive">*</span>
                 </label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className={"w-full justify-start text-left font-normal h-14 text-lg" + (joinDate ? "" : " text-muted-foreground")}
+                      className={"w-full justify-start text-left font-normal h-10 text-base" + (joinDate ? "" : " text-muted-foreground")}
                     >
                       {joinDate ? format(joinDate, "MMMM d, yyyy") : "Select join date"}
                     </Button>
@@ -199,12 +181,11 @@ const CreateEntry = () => {
                   </PopoverContent>
                 </Popover>
               </div>
-
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <Button
                   type="submit"
-                  className="flex-1 h-12 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
+                  className="flex-1 h-10 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -216,11 +197,10 @@ const CreateEntry = () => {
                     "Create Entry"
                   )}
                 </Button>
-                
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1 h-12"
+                  className="flex-1 h-10"
                   onClick={() => navigate("/dashboard")}
                   disabled={isLoading}
                 >
