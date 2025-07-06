@@ -1,7 +1,8 @@
 import { NavLink, useNavigate } from "react-router-dom";
-  import { LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import AltibbeLogo from "@/assets/logo/altibbe-logo.svg";
 
 const sidebarItems = [
   {
@@ -45,17 +46,22 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
       "fixed left-0 top-0 z-40 bg-card border-r border-border transition-all duration-300 flex flex-col h-screen shadow-xl",
       isCollapsed ? "w-20" : "w-56 xl:w-72"
     )}>
-      {/* Header */}
+      {/* Header with Altibbe Logo */}
       <div className={cn(
         "border-b border-border flex items-center justify-between",
         isCollapsed ? "px-0 py-3" : "p-6 xl:p-8"
       )}>
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-sm">
-              <div className="w-4 h-4 bg-primary-foreground rounded-sm"></div>
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img
+                src={AltibbeLogo}
+                alt="Altibbe Health Logo"
+                className="w-10 h-10 drop-shadow-md transition-all duration-300 dark:brightness-90"
+                style={{ filter: 'drop-shadow(0 2px 8px rgba(34,211,238,0.15))' }}
+              />
             </div>
-            <h1 className="font-bold text-lg text-foreground">Admin Panel</h1>
+            <h1 className="font-bold text-lg text-foreground tracking-wide">Altibbe Health</h1>
           </div>
         )}
         <button

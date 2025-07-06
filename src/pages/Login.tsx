@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AltibbeLogo from "@/assets/logo/altibbe-logo.svg";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,11 +43,18 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20 p-6 xl:p-12">
       <div className="w-full max-w-2xl animate-scale-in">
         <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm">
-          <CardHeader className="space-y-6 pb-12">
-            <div className="flex justify-center">
-              <div className="w-24 h-24 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
-                <div className="w-12 h-12 bg-primary-foreground rounded-lg"></div>
-              </div>
+          <CardHeader className="space-y-6 pb-8">
+            <div className="flex flex-col items-center justify-center">
+              <img
+                src={AltibbeLogo}
+                alt="Altibbe Health Logo"
+                className="w-20 h-20 mb-2 drop-shadow-md transition-all duration-300 dark:brightness-90"
+                style={{ filter: 'drop-shadow(0 2px 8px rgba(34,211,238,0.15))' }}
+              />
+              <span className="block text-base font-semibold tracking-wide text-primary dark:text-cyan-300 mb-1">Altibbe Health</span>
+              <span className="block text-xs text-muted-foreground font-medium tracking-wide text-center mb-2">
+                Empowering Your Health Journey
+              </span>
             </div>
             <div className="text-center space-y-3">
               <CardTitle className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">

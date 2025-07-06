@@ -1,4 +1,20 @@
 import { useEffect, useState } from "react";
+// Light/Dark mode hook
+function useTheme(): [string, (t: string) => void] {
+  const [theme, setThemeState] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || 'light';
+    }
+    return 'light';
+  });
+  useEffect(() => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+  const setTheme = (t: string) => setThemeState(t);
+  return [theme, setTheme];
+}
 import { supabase } from "@/lib/supabaseClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +31,7 @@ type User = {
 };
 
 const Dashboard = () => {
+  const [theme, setTheme] = useTheme();
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [roleFilter, setRoleFilter] = useState<string>("All");
@@ -121,6 +138,24 @@ const Dashboard = () => {
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 xl:px-8 space-y-12 animate-fade-in">
+      {/* Light/Dark Toggle */}
+      <div className="flex justify-end pt-6">
+        <button
+          className={`relative flex items-center w-16 h-8 rounded-full transition-colors duration-300 focus:outline-none shadow-md ${theme === 'dark' ? 'bg-gray-800' : 'bg-blue-200'}`}
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          aria-label="Toggle theme"
+        >
+          <span className={`absolute left-1 top-1 w-6 h-6 rounded-full flex items-center justify-center text-lg transition-all duration-300 ${theme === 'dark' ? 'translate-x-8 bg-gray-700 text-yellow-300' : 'translate-x-0 bg-white text-blue-500'}`}
+            style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }}
+          >
+            {theme === 'dark' ? '🌙' : '☀️'}
+          </span>
+          <span className={`ml-10 text-xs font-semibold transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-blue-700'}`}>{theme === 'dark' ? 'Dark' : 'Light'}</span>
+        </button>
+      </div>
+// Tailwind CSS: Add these to your tailwind.config.js if not present:
+// darkMode: 'class',
+// And ensure your color palette supports both light and dark backgrounds.
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
