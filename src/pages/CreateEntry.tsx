@@ -82,7 +82,7 @@ const CreateEntry = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20 overflow-hidden">
       <div className="w-full max-w-2xl animate-scale-in">
         <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm">
           <CardHeader className="bg-card-header rounded-t-lg p-6 xl:p-8">

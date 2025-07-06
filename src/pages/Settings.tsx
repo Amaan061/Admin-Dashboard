@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Settings = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/20 overflow-hidden">
       <div className="w-full max-w-3xl xl:max-w-4xl px-4 xl:px-8 space-y-8 animate-fade-in">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Settings</h1>
