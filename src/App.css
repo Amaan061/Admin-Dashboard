@@ -40,3 +40,42 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Custom styles for the role filter select */
+.role-filter-select {
+  background: #18181b !important;      /* dark black */
+  color: #fff !important;              /* white text */
+  border: 1.5px solid #333 !important; /* subtle border */
+}
+
+.role-filter-select:focus {
+  outline: none !important;
+  border-color: #444 !important;
+  box-shadow: 0 0 0 2px #222 !important;
+}
+
+/* Remove default arrow for Windows/IE */
+.role-filter-select::-ms-expand {
+  display: none;
+}
+
+/* For Chrome, Edge, Safari */
+.role-filter-select option {
+  background: #232326 !important;      /* light black for options */
+  color: #fff !important;
+}
+
+/* Make the calendar icon white in dark mode for input[type="date"] */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* For Firefox */
+@media (prefers-color-scheme: dark) {
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+  input[type="date"]::-moz-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}

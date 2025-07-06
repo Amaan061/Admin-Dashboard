@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 
 type User = {
   id: number;
@@ -167,19 +168,17 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 mb-2 w-full">
             {/* Role Filter */}
             <div className="relative">
-              <select
-                className="appearance-none w-full bg-muted/60 rounded-lg px-4 py-3 border-2 border-transparent focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200 font-semibold text-foreground"
-                value={roleFilter}
-                onChange={e => setRoleFilter(e.target.value)}
-              >
-                <option value="All">All Roles</option>
-                {allRoles.map(role => (
-                  <option key={role} value={role}>{role}</option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-              </div>
+              <Select value={roleFilter} onValueChange={setRoleFilter}>
+                <SelectTrigger className="w-full bg-muted/60 rounded-lg px-4 py-3 border-2 border-transparent focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200 font-semibold text-foreground">
+                  <SelectValue placeholder="All Roles" />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-black dark:bg-[#18181b] dark:text-white">
+                  <SelectItem value="All" className="focus:bg-gray-100 dark:focus:bg-[#232326] focus:text-black dark:focus:text-white">All Roles</SelectItem>
+                  {allRoles.map(role => (
+                    <SelectItem key={role} value={role} className="focus:bg-gray-100 dark:focus:bg-[#232326] focus:text-black dark:focus:text-white">{role}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Join Date Filter */}
@@ -202,12 +201,12 @@ const Dashboard = () => {
             <div className="relative lg:col-span-1">
               <input
                 type="text"
-                className="w-full bg-muted/60 rounded-lg pl-12 pr-4 py-3 border-2 border-transparent focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200 font-semibold text-foreground placeholder:text-muted-foreground"
+                className="w-full bg-muted/60 rounded-lg pl-12 pr-4 py-3 border-2 border-transparent focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200 font-semibold text-foreground placeholder:text-[#18181b] dark:placeholder:text-white"
                 placeholder="Search by name or email..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted-foreground">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[#18181b] dark:text-white">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </div>
             </div>
@@ -284,25 +283,25 @@ const Dashboard = () => {
                       </td>
                       <td className="p-6">{getStatusBadge(row.status)}</td>
                       <td className="p-6 text-muted-foreground">
-                        {row.join_date ? new Date(row.join_date).toLocaleDateString() : "-"}
+                        {row.join_date ? new Date(row.join_date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "-"}
                       </td>
                       <td className="p-6">
-                        <div className="flex space-x-4">
+                        <div className="flex space-x-3">
                           <Button
                             variant="outline"
                             size="lg"
                             onClick={() => handleEdit(row.id)}
-                            className="hover:bg-primary/10 hover:text-primary text-lg xl:text-xl px-6 py-3"
+                            className="hover:bg-primary/10 hover:text-primary text-lg xl:text-xl px-4 py-3"
                           >
-                            Edit
+                            ✏️ Edit
                           </Button>
                           <Button
                             variant="outline"
                             size="lg"
                             onClick={() => handleDelete(row.id)}
-                            className="hover:bg-destructive/10 hover:text-destructive text-lg xl:text-xl px-6 py-3"
+                            className="hover:bg-destructive/10 hover:text-destructive text-lg xl:text-xl px-4 py-3"
                           >
-                            Delete
+                            🗑️ Delete
                           </Button>
                         </div>
                       </td>
