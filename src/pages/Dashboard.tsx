@@ -1,20 +1,6 @@
 import { useEffect, useState } from "react";
-// Light/Dark mode hook
-function useTheme(): [string, (t: string) => void] {
-  const [theme, setThemeState] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'light';
-    }
-    return 'light';
-  });
-  useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-  const setTheme = (t: string) => setThemeState(t);
-  return [theme, setTheme];
-}
+
+
 import { supabase } from "@/lib/supabaseClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +17,7 @@ type User = {
 };
 
 const Dashboard = () => {
-  const [theme, setTheme] = useTheme();
+
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [roleFilter, setRoleFilter] = useState<string>("All");
@@ -138,24 +124,7 @@ const Dashboard = () => {
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 xl:px-8 space-y-12 animate-fade-in">
-      {/* Light/Dark Toggle */}
-      <div className="flex justify-end pt-6">
-        <button
-          className={`relative flex items-center w-16 h-8 rounded-full transition-colors duration-300 focus:outline-none shadow-md ${theme === 'dark' ? 'bg-gray-800' : 'bg-blue-200'}`}
-          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-          aria-label="Toggle theme"
-        >
-          <span className={`absolute left-1 top-1 w-6 h-6 rounded-full flex items-center justify-center text-lg transition-all duration-300 ${theme === 'dark' ? 'translate-x-8 bg-gray-700 text-yellow-300' : 'translate-x-0 bg-white text-blue-500'}`}
-            style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }}
-          >
-            {theme === 'dark' ? '🌙' : '☀️'}
-          </span>
-          <span className={`ml-10 text-xs font-semibold transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-blue-700'}`}>{theme === 'dark' ? 'Dark' : 'Light'}</span>
-        </button>
-      </div>
-// Tailwind CSS: Add these to your tailwind.config.js if not present:
-// darkMode: 'class',
-// And ensure your color palette supports both light and dark backgrounds.
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
@@ -180,7 +149,7 @@ const Dashboard = () => {
           <Card key={index} className="card-hover border-0 shadow-lg bg-gradient-surface">
             <CardContent className="flex flex-col items-center justify-center p-10 min-h-[120px] h-full">
               <span className="text-5xl mb-2 flex items-center justify-center">{stat.icon}</span>
-              <span className="text-4xl xl:text-5xl font-bold text-foreground">{stat.value}</span>
+              <span className="text-4xl xl:text-5xl font-bold text-[hsl(var(--foreground))]" style={{color: 'hsl(var(--foreground))'}}>{stat.value}</span>
               <span className="text-lg xl:text-xl text-muted-foreground">{stat.title}</span>
             </CardContent>
           </Card>
@@ -195,39 +164,52 @@ const Dashboard = () => {
             Manage your team members and their information
           </CardDescription>
           {/* Filters */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-8 mb-2 w-full">
-            <div className="flex items-center bg-muted/60 rounded-lg px-4 py-2 shadow-sm w-full sm:w-auto">
-              <label className="mr-3 font-semibold text-muted-foreground whitespace-nowrap">Role:</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 mb-2 w-full">
+            {/* Role Filter */}
+            <div className="relative">
               <select
-                className="bg-transparent outline-none border-none text-base font-medium text-foreground focus:ring-0 focus:outline-none"
+                className="appearance-none w-full bg-muted/60 rounded-lg px-4 py-3 border-2 border-transparent focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200 font-semibold text-foreground"
                 value={roleFilter}
                 onChange={e => setRoleFilter(e.target.value)}
               >
-                <option value="All">All</option>
+                <option value="All">All Roles</option>
                 {allRoles.map(role => (
                   <option key={role} value={role}>{role}</option>
                 ))}
               </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              </div>
             </div>
-            <div className="flex items-center bg-muted/60 rounded-lg px-4 py-2 shadow-sm w-full sm:w-auto">
-              <label className="mr-3 font-semibold text-muted-foreground whitespace-nowrap">Join Date:</label>
+
+            {/* Join Date Filter */}
+            <div className="relative">
               <input
                 type="date"
-                className="bg-transparent outline-none border-none text-base font-medium text-foreground focus:ring-0 focus:outline-none"
+                className="appearance-none w-full bg-muted/60 rounded-lg px-4 py-3 border-2 border-transparent focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200 font-semibold text-foreground"
                 value={joinDateFilter || ''}
                 onChange={e => setJoinDateFilter(e.target.value)}
                 max={new Date().toISOString().split('T')[0]}
               />
+              {joinDateFilter && (
+                <button onClick={() => setJoinDateFilter('')} className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+              )}
             </div>
-            <div className="flex-1 flex items-center bg-muted/60 rounded-lg px-4 py-2 shadow-sm">
-              <svg className="w-5 h-5 text-muted-foreground mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+
+            {/* Search Filter */}
+            <div className="relative lg:col-span-1">
               <input
                 type="text"
-                className="bg-transparent border-none outline-none w-full text-base font-medium text-foreground placeholder:text-muted-foreground"
+                className="w-full bg-muted/60 rounded-lg pl-12 pr-4 py-3 border-2 border-transparent focus:border-primary focus:ring-0 focus:outline-none transition-all duration-200 font-semibold text-foreground placeholder:text-muted-foreground"
                 placeholder="Search by name or email..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted-foreground">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
             </div>
           </div>
         </CardHeader>

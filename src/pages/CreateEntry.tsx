@@ -88,7 +88,7 @@ const CreateEntry = () => {
       </div>
 
       {/* Form Card */}
-      <Card className="border-0 shadow-2xl bg-gradient-surface">
+      <Card className="border-0 shadow-2xl" style={{background: 'var(--gradient-surface, linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%)))'}}>
         <CardHeader className="bg-card-header rounded-t-lg p-8 xl:p-10">
           <CardTitle className="text-2xl xl:text-3xl">Member Information</CardTitle>
           <CardDescription className="text-lg xl:text-xl">

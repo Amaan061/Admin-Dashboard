@@ -1,8 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import AltibbeLogo from "@/assets/logo/altibbe-logo.svg";
+import useTheme from "@/hooks/useTheme";
 
 const sidebarItems = [
   {
@@ -28,6 +29,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
+  const [theme, setTheme] = useTheme();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -47,33 +49,50 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
       isCollapsed ? "w-20" : "w-56 xl:w-72"
     )}>
       {/* Header with Altibbe Logo */}
+      {/* Header with Altibbe Logo */}
       <div className={cn(
-        "border-b border-border flex items-center justify-between",
+        "border-b border-border",
         isCollapsed ? "px-0 py-3" : "p-6 xl:p-8"
       )}>
-        {!isCollapsed && (
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 flex items-center justify-center">
-              <img
-                src={AltibbeLogo}
-                alt="Altibbe Health Logo"
-                className="w-10 h-10 drop-shadow-md transition-all duration-300 dark:brightness-90"
-                style={{ filter: 'drop-shadow(0 2px 8px rgba(34,211,238,0.15))' }}
-              />
+        <div className="flex items-center justify-between">
+          {!isCollapsed && (
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img
+                  src={AltibbeLogo}
+                  alt="Altibbe Health Logo"
+                  className="w-10 h-10 drop-shadow-md transition-all duration-300 dark:brightness-90"
+                  style={{ filter: 'drop-shadow(0 2px 8px rgba(34,211,238,0.15))' }}
+                />
+              </div>
+              <h1 className="font-bold text-lg text-foreground tracking-wide">Altibbe Health</h1>
             </div>
-            <h1 className="font-bold text-lg text-foreground tracking-wide">Altibbe Health</h1>
+          )}
+          <button
+            onClick={onToggle}
+            className={cn(
+              "flex items-center justify-center rounded-lg hover:bg-accent transition-colors",
+              isCollapsed ? "w-10 h-10 mx-auto" : "w-8 h-8"
+            )}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? "→" : "←"}
+          </button>
+        </div>
+        {!isCollapsed && (
+          <div className="theme-toggle-container mt-4">
+            <button
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              className={cn(
+                "theme-toggle",
+                theme === "light" ? "light-mode" : "dark-mode"
+              )}
+              title="Switch theme"
+            >
+              <span className="toggle-slider">{theme === 'dark' ? '🌙' : '☀️'}</span>
+            </button>
           </div>
         )}
-        <button
-          onClick={onToggle}
-          className={cn(
-            "flex items-center justify-center rounded-lg hover:bg-accent transition-colors",
-            isCollapsed ? "w-10 h-10 mx-auto" : "w-8 h-8"
-          )}
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {isCollapsed ? "→" : "←"}
-        </button>
       </div>
 
       {/* Navigation */}
@@ -109,7 +128,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
         ))}
       </nav>
 
-      {/* User Section */}
+      {/* User & Theme Section */}
       <div className={cn(
         isCollapsed ? "flex flex-col items-center gap-3 py-6 border-t border-border" : "p-6 xl:p-8 border-t border-border"
       )}>
@@ -123,14 +142,17 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
             A
           </div>
           {!isCollapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">
-                {localStorage.getItem("userEmail") || "Admin User"}
-              </p>
-              <p className="text-xs text-muted-foreground">Administrator</p>
-            </div>
+            <>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">
+                  {localStorage.getItem("userEmail") || "Admin User"}
+                </p>
+                <p className="text-xs text-muted-foreground">Administrator</p>
+              </div>
+            </>
           )}
         </div>
+
         <button
           onClick={handleLogout}
           className={cn(
