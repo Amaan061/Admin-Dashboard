@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { format } from "date-fns";
 
 const CreateEntry = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +20,7 @@ const CreateEntry = () => {
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [joinDate, setJoinDate] = useState<Date | undefined>(undefined);
 
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
@@ -51,7 +55,7 @@ const CreateEntry = () => {
         email: formData.email,
         role: formData.role,
         status: "Active",
-        join_date: new Date().toISOString().slice(0, 10),
+        join_date: (joinDate || new Date()).toISOString().slice(0, 10),
       },
     ]);
     setIsLoading(false);
@@ -170,6 +174,31 @@ const CreateEntry = () => {
               )}
             </div>
 
+            {/* Join Date Field */}
+            <div className="space-y-2">
+              <label className="text-lg font-semibold text-foreground">
+                Join Date <span className="text-destructive">*</span>
+              </label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={"w-full justify-start text-left font-normal h-14 text-lg" + (joinDate ? "" : " text-muted-foreground")}
+                  >
+                    {joinDate ? format(joinDate, "MMMM d, yyyy") : "Select join date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={joinDate}
+                    onSelect={setJoinDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
@@ -198,22 +227,6 @@ const CreateEntry = () => {
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
-
-      {/* Info Card */}
-      <Card className="border-primary/20 bg-primary/5">
-        <CardContent className="p-6">
-          <div className="flex items-start space-x-3">
-            <div className="text-primary text-xl">💡</div>
-            <div>
-              <h3 className="font-semibold text-primary mb-1">Quick Tip</h3>
-              <p className="text-sm text-primary/80">
-                Make sure the email address is valid as this will be used for sending invitations 
-                and important notifications to the new team member.
-              </p>
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>
